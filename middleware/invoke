@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Use a single user location for all molspec instances.
+# Typical a separate location is used for each tool revision.
+# For this tool however each revision is intended to build on
+# previous revision in a compatible manner. 
+
+toolDirectory=$(dirname $(dirname $0))
+revision=$(basename $(realpath ${toolDirectory}))
+userDirectory=${HOME}/STIRITUP
+
+mkdir -p ${userDirectory}/git
+cp -f ${toolDirectory}/main.ipynb ${userDirectory}
+
+mkdir -p ${userDirectory}/local
+
+/usr/bin/invoke_app "$@" -t stiritup \
+                         -C "start_jupyter -A -t ${userDirectory}/main.ipynb" \
+                                                  -u anaconda-6
